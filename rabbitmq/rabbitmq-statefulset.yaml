@@ -42,9 +42,7 @@ spec:
         - name: AUTOCLUSTER_TYPE
           value: "k8s"
         - name: K8S_SERVICE_NAME
-          valueFrom:
-           fieldRef:
-            fieldPath: metadata.labels.app
+          value: "rabbitmq"
         - name: RABBITMQ_NODENAME
           value: "rabbitmq@$(HOSTNAME)"
         - name: RABBITMQ_USE_LONGNAME
