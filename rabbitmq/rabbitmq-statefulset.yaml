@@ -39,19 +39,16 @@ spec:
           valueFrom:
            fieldRef:
             fieldPath: status.podIP
-        - name: AUTOCLUSTER_LOG_LEVEL
-          value: "info"
-        - name: AUTOCLUSTER_CLEANUP
-          value: "true"
-        - name: CLEANUP_INTERVAL
-          value: "60"
-        - name: CLEANUP_WARN_ONLY
-          value: "false"
-        - name: RABBITMQ_ERLANG_COOKIE
+        - name: AUTOCLUSTER_TYPE
+          value: "k8s"
+        - name: K8S_SERVICE_NAME
           valueFrom:
-            secretKeyRef:
-              name: rabbitmq
-              key: erlang-cookie
+           fieldRef:
+            fieldPath: metadata.labels.app
+        - name: RABBITMQ_NODENAME
+          value: "rabbitmq@$(HOSTNAME)"
+        - name: RABBITMQ_USE_LONGNAME
+          value: "true"
         - name: RABBITMQ_DEFAULT_USER
           value: "admin"
         - name: RABBITMQ_DEFAULT_PASS
@@ -59,10 +56,11 @@ spec:
             secretKeyRef:
               name: rabbitmq
               key: default-password
-        - name: K8S_SERVICE_NAME
-          value: "rabbitmq"
-        - name: RABBITMQ_NODENAME
-          value: "rabbitmq@$(HOSTNAME)"
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: erlang-cookie
       volumes:
         - name : rabbitmq
           emptyDir:
